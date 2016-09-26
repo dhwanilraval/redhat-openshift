@@ -63,7 +63,7 @@
         },
         "masterVmSize": {
             "type": "string",
-            "defaultValue": "Standard_DS3_v2",
+            "defaultValue": "Standard_DS2_v2",
             "allowedValues": [
                 "Standard_A4",
                 "Standard_A5",
@@ -119,7 +119,7 @@
         },
         "nodeVmSize": {
             "type": "string",
-            "defaultValue": "Standard_DS3_v2",
+            "defaultValue": "Standard_DS2_v2",
             "allowedValues": [
                 "Standard_A4",
                 "Standard_A5",
@@ -175,7 +175,6 @@
         },
         "openshiftMasterHostname": {
             "type": "string",
-            "defaultValue": "openshiftvm",
             "minLength": 1,
             "metadata": {
                 "description": "OpenShift Master hostname"
@@ -184,14 +183,12 @@
         "openshiftMasterPublicIpDnsLabelPrefix": {
             "type": "string",
             "minLength": 1,
-            "defaultValue": "openshiftpip",
             "metadata": {
                 "description": "OpenShift Master VM public IP DNS name. Must be lowercase. It should match with the following regular expression: ^[a-z][a-z0-9-]{1,61}[a-z0-9]$ or it will raise an error."
             }
         },
         "nodeLbPublicIpDnsLabelPrefix": {
             "type": "string",
-            "defaultValue": "usernodepip",
             "minLength": 1,
             "metadata": {
                 "description": "OpenShift Nodes Load Balancer public IP DNS name. Must be lowercase. It should match with the following regular expression: ^[a-z][a-z0-9-]{1,61}[a-z0-9]$ or it will raise an error."
@@ -200,7 +197,6 @@
         "nodePrefix": {
             "type": "string",
             "minLength": 1,
-            "defaultValue": "usernode",
             "metadata": {
                 "description": "OpenShift Node VM prefix"
             }
@@ -241,7 +237,6 @@
         "cloudAccessUsername": {
             "type": "string",
             "minLength": 1,
-            "defaultValue": "",
             "metadata": {
                 "description": "Cloud Access Username"
             }
@@ -256,7 +251,6 @@
         "cloudAccessPoolId": {
             "type": "string",
             "minLength": 1,
-            "defaultValue": "",
             "metadata": {
                 "description": "Pool ID with RHEL and OpenShift entitlements"
             }
@@ -297,7 +291,6 @@
         },
         "defaultSubDomain": {
             "type": "string",
-            "defaultValue": "",
             "minLength": 1,
             "metadata": {
                 "description": "Default Subdomain for application routing (Wildcard DNS)"

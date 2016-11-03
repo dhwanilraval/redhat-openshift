@@ -2,14 +2,7 @@
     "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "_artifactsLocation": {
-            "type": "string",
-            "metadata": {
-                "description": "Base URL for Template FIles",
-                "artifactsBaseUrl": ""
-            },
-            "defaultValue": "https://raw.githubusercontent.com/haroldwongms/openshift-enterprise/master"
-        },
+        
         "masterVmSize": {
             "type": "string",
             "defaultValue": "Standard_DS2_v2",
@@ -275,6 +268,7 @@
         }
     },
     "variables": {
+        "baseUrl":"https://raw.githubusercontent.com/sysgain/redhat-openshift/redhat-openshift-sqldb/redhat/",
         "location": "[resourceGroup().location]",
         "apiVersionCompute": "2015-06-15",
         "apiVersionNetwork": "2015-06-15",
@@ -315,11 +309,11 @@
         },
         "imageReference": "[variables('osType')]",
         "sshKeyPath": "[concat('/home/', parameters('adminUsername'), '/.ssh/authorized_keys')]",
-        "nodePrepScriptUrl": "[concat(parameters('_artifactsLocation'), '/nodePrep.sh')]",
-        "masterPrepScriptUrl": "[concat(parameters('_artifactsLocation'), '/masterPrep.sh')]",
+        "nodePrepScriptUrl": "[concat(variables('baseUrl'), '/nodePrep.sh')]",
+        "masterPrepScriptUrl": "[concat(variables('baseUrl'), '/masterPrep.sh')]",
         "nodePrepScriptFileName": "nodePrep.sh",
         "masterPrepScriptFileName": "masterPrep.sh",
-        "openshiftDeploymentTemplateUrl": "[concat(parameters('_artifactsLocation'), '/openshiftdeploy.json')]",
+        "openshiftDeploymentTemplateUrl": "[concat(variables('baseUrl'), 'nested/openshiftdeploy.json')]",
         "vmSizesMap": {
             "Standard_A4": {
                 "storageAccountType": "Standard_LRS"

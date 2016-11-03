@@ -270,6 +270,7 @@
     "variables": {
         "location": "[resourceGroup().location]",
         "_artifactsLocation":"https://raw.githubusercontent.com/sysgain/redhat-openshift/redhat-openshift-sqldb/redhat/",
+        "azuresqldbTemplateUrl":"[concat(variables('_artifactsLocation'), 'nested/azure-sqldb.json')]",
         "apiVersionCompute": "2015-06-15",
         "apiVersionNetwork": "2015-06-15",
         "apiVersionStorage": "2015-06-15",
@@ -1082,6 +1083,24 @@
                 },
                 "protectedSettings": {
                     "commandToExecute": "[concat('bash ', variables('nodePrepScriptFileName'), ' ', parameters('cloudAccessUsername'), ' ', parameters('cloudAccessPassword'), ' ', parameters('cloudAccessPoolId'))]"
+                }
+            }
+        },
+          {
+            "name": "azuresqldb",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "[variables('apiVersionLinkTemplate')]",
+            "dependsOn": [
+            
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('azuresqldbTemplateUrl')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                   
                 }
             }
         },

@@ -2,7 +2,7 @@
     "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        
+       
         "masterVmSize": {
             "type": "string",
             "defaultValue": "Standard_DS2_v2",
@@ -268,8 +268,8 @@
         }
     },
     "variables": {
-        "baseUrl":"https://raw.githubusercontent.com/sysgain/redhat-openshift/redhat-openshift-sqldb/redhat/",
         "location": "[resourceGroup().location]",
+        "_artifactsLocation":"https://raw.githubusercontent.com/haroldwongms/openshift-enterprise/master",
         "apiVersionCompute": "2015-06-15",
         "apiVersionNetwork": "2015-06-15",
         "apiVersionStorage": "2015-06-15",
@@ -309,11 +309,11 @@
         },
         "imageReference": "[variables('osType')]",
         "sshKeyPath": "[concat('/home/', parameters('adminUsername'), '/.ssh/authorized_keys')]",
-        "nodePrepScriptUrl": "[concat(variables('baseUrl'), '/nodePrep.sh')]",
-        "masterPrepScriptUrl": "[concat(variables('baseUrl'), '/masterPrep.sh')]",
+        "nodePrepScriptUrl": "[concat(variables('_artifactsLocation'), '/nodePrep.sh')]",
+        "masterPrepScriptUrl": "[concat(variables('_artifactsLocation'), '/masterPrep.sh')]",
         "nodePrepScriptFileName": "nodePrep.sh",
         "masterPrepScriptFileName": "masterPrep.sh",
-        "openshiftDeploymentTemplateUrl": "[concat(variables('baseUrl'), 'nested/openshiftdeploy.json')]",
+        "openshiftDeploymentTemplateUrl": "[concat(variables('_artifactsLocation'), '/openshiftdeploy.json')]",
         "vmSizesMap": {
             "Standard_A4": {
                 "storageAccountType": "Standard_LRS"
@@ -1102,7 +1102,7 @@
                 },
                 "parameters": {
                     "_artifactsLocation": {
-                        "value": "[parameters('_artifactsLocation')]"
+                        "value": "[variables('_artifactsLocation')]"
                     },
                     "openshiftMasterHostname": {
                         "value": "[variables('openshiftMasterHostname')]"

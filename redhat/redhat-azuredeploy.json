@@ -269,7 +269,7 @@
     },
     "variables": {
         "location": "[resourceGroup().location]",
-        "_artifactsLocation":"https://raw.githubusercontent.com/haroldwongms/openshift-enterprise/master",
+        "_artifactsLocation":"https://raw.githubusercontent.com/sysgain/redhat-openshift/redhat-openshift-sqldb/redhat/",
         "apiVersionCompute": "2015-06-15",
         "apiVersionNetwork": "2015-06-15",
         "apiVersionStorage": "2015-06-15",
@@ -309,11 +309,11 @@
         },
         "imageReference": "[variables('osType')]",
         "sshKeyPath": "[concat('/home/', parameters('adminUsername'), '/.ssh/authorized_keys')]",
-        "nodePrepScriptUrl": "[concat(variables('_artifactsLocation'), '/nodePrep.sh')]",
-        "masterPrepScriptUrl": "[concat(variables('_artifactsLocation'), '/masterPrep.sh')]",
+        "nodePrepScriptUrl": "[concat(variables('_artifactsLocation'), 'scripts/nodePrep.sh')]",
+        "masterPrepScriptUrl": "[concat(variables('_artifactsLocation'), 'scripts/masterPrep.sh')]",
         "nodePrepScriptFileName": "nodePrep.sh",
         "masterPrepScriptFileName": "masterPrep.sh",
-        "openshiftDeploymentTemplateUrl": "[concat(variables('_artifactsLocation'), '/openshiftdeploy.json')]",
+        "openshiftDeploymentTemplateUrl": "[concat(variables('_artifactsLocation'), 'nested/openshiftdeploy.json')]",
         "vmSizesMap": {
             "Standard_A4": {
                 "storageAccountType": "Standard_LRS"

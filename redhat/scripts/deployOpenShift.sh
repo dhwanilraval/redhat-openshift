@@ -10,11 +10,14 @@ PRIVATEKEY=$3
 MASTER=$4
 MASTERPUBLICIPHOSTNAME=$5
 MASTERPUBLICIPADDRESS=$6
-NODEPREFIX=$7
-NODECOUNT=$8
-ROUTING=$9
+INFRA=$7
+NODE=$8
+NODECOUNT=$9
+ROUTING=${10}
 
-DOMAIN=$( awk 'NR==2' /etc/resolv.conf | awk '{ print $2 }' )
+# DOMAIN=$( awk 'NR==2' /etc/resolv.conf | awk '{ print $2 }' )
+
+echo $PASSWORD
 
 # Generate private keys for use by Ansible
 echo $(date) " - Generating Private keys for use by Ansible for OpenShift Installation"
@@ -38,18 +41,24 @@ cat > /etc/ansible/hosts <<EOF
 [OSEv3:children]
 masters
 nodes
+etcd
 
 # Set variables common for all OSEv3 hosts
 [OSEv3:vars]
 ansible_ssh_user=$SUDOUSER
-#ansible_sudo=true
 ansible_become=yes
+openshift_install_examples=true
 deployment_type=openshift-enterprise
 docker_udev_workaround=True
-# containerized=true
 openshift_use_dnsmasq=no
 openshift_master_default_subdomain=$ROUTING
 
+# default selectors for router and registry services 
+openshift_router_selector='region=infra' 
+openshift_registry_selector='region=infra' 
+
+openshift_master_cluster_method=native
+openshift_master_cluster_hostname=$MASTERPUBLICIPHOSTNAME
 openshift_master_cluster_public_hostname=$MASTERPUBLICIPHOSTNAME
 openshift_master_cluster_public_vip=$MASTERPUBLICIPADDRESS
 
@@ -58,16 +67,22 @@ openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 
 
 # host group for masters
 [masters]
-$MASTER.$DOMAIN
+$MASTER openshift_node_labels="{'role': 'master'}" 
+
+# host group for etcd
+[etcd]
+$MASTER
 
 # host group for nodes
 [nodes]
-$MASTER.$DOMAIN openshift_node_labels="{'region': 'infra', 'zone': 'default'}" openshift_schedulable=true
+$MASTER openshift_node_labels="{'region': 'master', 'zone': 'default'}"
+$INFRA openshift_node_labels="{'region': 'infra', 'zone': 'default'}"
+
 EOF
 
 for (( c=0; c<$NODECOUNT; c++ ))
 do
-  echo "$NODEPREFIX-$c.$DOMAIN" >> /etc/ansible/hosts
+  echo "$NODE-$c openshift_node_labels=\"{'region': 'nodes', 'zone': 'default'}\"" >> /etc/ansible/hosts
 done
 
 
@@ -81,17 +96,11 @@ echo $(date) " - Modifying sudoers"
 sed -i -e "s/Defaults    requiretty/# Defaults    requiretty/" /etc/sudoers
 sed -i -e '/Defaults    env_keep += "LC_TIME LC_ALL LANGUAGE LINGUAS _XKB_CHARSET XAUTHORITY"/aDefaults    env_keep += "PATH"' /etc/sudoers
 
-echo $(date) "- Deploying Registry"
-
-# runuser -l $SUDOUSER -c "sudo oadm registry --config=/etc/origin/master/admin.kubeconfig --credentials=/etc/origin/master/openshift-registry.kubeconfig"
-
-# runuser -l $SUDOUSER -c "sudo oadm registry --config=/etc/origin/master/admin.kubeconfig --service-account=registry --images='registry.access.redhat.com/openshift3/ose-${component}:${version}'"
+# Deploying Registry
+echo $(date) "- Registry deployed to infra node"
 
 # Deploying Router
-
-echo $(date) "- Deploying Router"
-
-runuser -l $SUDOUSER -c "sudo oadm router osrouter --replicas=$NODECOUNT --credentials=/etc/origin/master/openshift-router.kubeconfig --service-account=router"
+echo $(date) "- Router deployed to infra nodes"
 
 echo $(date) "- Re-enabling requiretty"
 

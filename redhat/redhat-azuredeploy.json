@@ -2,7 +2,6 @@
     "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
     "contentVersion": "1.0.0.0",
     "parameters": {
-       
         "masterVmSize": {
             "type": "string",
             "defaultValue": "Standard_DS2_v2",
@@ -265,12 +264,46 @@
             "metadata": {
                 "description": "Default Subdomain for application routing (Wildcard DNS)"
             }
+        },
+        "sqlAdminLogin": {
+            "type": "string",
+            "metadata": {
+                "description": "Azure SQL DB server administrator login name"
+            }
+        },
+        "sqlAdminLoginPassword": {
+            "type": "securestring",
+            "metadata": {
+                "description": "Azure SQL DB server administrator login password"
+            }
+        },
+        "sqltierForSize": {
+            "type": "string",
+            "defaultValue": "S2",
+            "allowedValues": [
+                "Basic",
+                "S0",
+                "S1",
+                "S2",
+                "S3",
+                "P1",
+                "P2",
+                "P3"
+            ],
+            "metadata": {
+                "description": "The Sizes corresponding to the Tier level for Edition.  Basic = 2GB, S0 = 20GB, S1 = 50GB, S2 = 150GB, S3 = 250GB, P1 = 300GB, P2 = 400GB, P3 = 500GB"
+            }
         }
     },
     "variables": {
         "location": "[resourceGroup().location]",
-        "_artifactsLocation":"https://raw.githubusercontent.com/sysgain/redhat-openshift/redhat-openshift-sqldb/redhat/",
-        "azuresqldbTemplateUrl":"[concat(variables('_artifactsLocation'), 'nested/azure-sqldb.json')]",
+        "sqlservername": "[concat('sqlserver',uniqueString(resourceGroup().id))]",
+        "sqldatabasesName": "[concat('sqldb',uniqueString(resourceGroup().id))]",
+        "firewallRulesName": "AllowIPs",
+        "startIpAddress": "0.0.0.0",
+        "endIpAddress": "0.0.0.0",
+        "_artifactsLocation": "https://raw.githubusercontent.com/sysgain/redhat-openshift/redhat-openshift-sqldb/redhat/",
+        "azuresqldbTemplateUrl": "[concat(variables('_artifactsLocation'), 'nested/azure-sqldb.json')]",
         "apiVersionCompute": "2015-06-15",
         "apiVersionNetwork": "2015-06-15",
         "apiVersionStorage": "2015-06-15",
@@ -1086,13 +1119,11 @@
                 }
             }
         },
-          {
+        {
             "name": "azuresqldb",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "[variables('apiVersionLinkTemplate')]",
-            "dependsOn": [
-            
-            ],
+            "dependsOn": [],
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -1100,7 +1131,33 @@
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
-                   
+                    "servername": {
+                        "value": "[variables('sqlservername')]"
+                    },
+                    "adminLogin": {
+                        "value": "[parameters('sqlAdminLogin')]"
+                    },
+                    "adminLoginPassword": {
+                        "value": "[parameters('sqlAdminLoginPassword')]"
+                    },
+                    "databasesName": {
+                        "value": "[variables('sqldatabasesName')]"
+                    },
+                    "tierForSize": {
+                        "value": "[parameters('sqltierForSize')]"
+                    },
+                    "location": {
+                        "value": "[variables('location')]"
+                    },
+                    "firewallRulesName": {
+                        "value": "[variables('firewallRulesName')]"
+                    },
+                    "startIpAddress": {
+                        "value": "[variables('startIpAddress')]"
+                    },
+                    "endIpAddress": {
+                        "value": "[variables('endIpAddress')]"
+                    }
                 }
             }
         },

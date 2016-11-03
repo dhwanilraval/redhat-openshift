@@ -118,6 +118,7 @@
         },
         "openshiftClusterPrefix": {
             "type": "string",
+            "defaultValue": "op",
             "minLength": 1,
             "maxLength": 5,
             "metadata": {
@@ -126,6 +127,7 @@
         },
         "openshiftMasterPublicIpDnsLabel": {
             "type": "string",
+            "defaultValue": "opmadns",
             "minLength": 1,
             "metadata": {
                 "description": "OpenShift Master VM public IP DNS name. Must be lowercase. It should match with the following regular expression: ^[a-z][a-z0-9-]{1,61}[a-z0-9]$ or it will raise an error."
@@ -134,6 +136,7 @@
         "nodeLbPublicIpDnsLabel": {
             "type": "string",
             "minLength": 1,
+            "defaultValue": "opnodns",
             "metadata": {
                 "description": "OpenShift Nodes Load Balancer public IP DNS name. Must be lowercase. It should match with the following regular expression: ^[a-z][a-z0-9-]{1,61}[a-z0-9]$ or it will raise an error."
             }
@@ -180,6 +183,7 @@
         },
         "adminUsername": {
             "type": "string",
+            "defaultValue": "ashuser",
             "minLength": 1,
             "metadata": {
                 "description": "Administrator username on all VMs and first OpenShift Username"
@@ -194,6 +198,7 @@
         },
         "cloudAccessUsername": {
             "type": "string",
+            "defaultValue": "pradeep-sysgain",
             "minLength": 1,
             "metadata": {
                 "description": "Cloud Access Username"
@@ -208,6 +213,7 @@
         },
         "cloudAccessPoolId": {
             "type": "string",
+            "defaultValue": "8a85f98151bb49d20151ca249d483d93",
             "minLength": 1,
             "metadata": {
                 "description": "Pool ID with RHEL and OpenShift entitlements"
@@ -215,12 +221,14 @@
         },
         "sshPublicKey": {
             "type": "securestring",
+            "defaultValue": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC8T46pA0uM64Yeis6DO9Q01g8lfvHMe4I4kpRW9u4QYiDL6jctLw6+Y1VHtROIYvuN4AHqBR7hQgAX3256Cu90EhmygWZglsVcKUBhir25NRuRM4qBcA+k1oBJt0EOKXZRDw6Efb/wLEcDtP2jnx7dOb9C7NewNNPCAEIOIvwfLechHAC7VcTe6cvqQ37r8TJpMz7WHZYhS4eyCajZt3KLbi+XciEWbucXISLPL4h+9RpVAkybmCkIfB08lX/wQ+d2O7Q0hOOLB6gU/49w/fkBmEjz13pRQcB5gV9ULbHIkP6Wn3mXYXGZm6rwzDHSC1BcxZy1erKqekhHtTMqZ6DZ",
             "metadata": {
                 "description": "SSH public key on all VMs"
             }
         },
         "subscriptionId": {
             "type": "string",
+            "defaultValue": "7eab3893-bd71-4690-84a5-47624df0b0e5",
             "minLength": 1,
             "metadata": {
                 "description": "Azure Subscription ID"
@@ -228,6 +236,7 @@
         },
         "keyVaultResourceGroup": {
             "type": "string",
+            "defaultValue": "bbtestos6",
             "minLength": 1,
             "metadata": {
                 "description": "Resource Group that contains the Key Vault"
@@ -235,6 +244,7 @@
         },
         "keyVaultName": {
             "type": "string",
+            "defaultValue": "bbopenshiftkeyvault6",
             "minLength": 1,
             "metadata": {
                 "description": "Name of the Key Vault"
@@ -242,6 +252,7 @@
         },
         "keyVaultSecret": {
             "type": "securestring",
+            "defaultValue": "privatekey6",
             "minLength": 1,
             "metadata": {
                 "description": "Key Vault Secret Name that contains the Private Key"
@@ -267,6 +278,7 @@
         },
         "sqlAdminLogin": {
             "type": "string",
+            "defaultValue": "sqluser",
             "metadata": {
                 "description": "Azure SQL DB server administrator login name"
             }

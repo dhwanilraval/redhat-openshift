@@ -19,6 +19,8 @@ ROUTING=${10}
 
 echo $PASSWORD
 
+sleep 15
+
 # Generate private keys for use by Ansible
 echo $(date) " - Generating Private keys for use by Ansible for OpenShift Installation"
 

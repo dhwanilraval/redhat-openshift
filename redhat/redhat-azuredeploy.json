@@ -314,6 +314,9 @@
         }
     },
     "variables": {
+
+       
+        "uniqueString": "[substring(uniqueString(resourceGroup().id) ,0 ,7)]",
         "openshiftMasterPublicIpDnsPrefix":"[concat(parameters('openshiftMasterPublicIpDnsLabel'),uniqueString(resourceGroup().id))]",
         "nodeLbPublicIpDnsPrefix":"[concat(parameters('nodeLbPublicIpDnsLabel'),uniqueString(resourceGroup().id))]",
         "location": "[resourceGroup().location]",
@@ -939,7 +942,8 @@
                     "osDisk": {
                         "name": "[concat(variables('openshiftMasterHostname'), 'osdisk')]",
                         "vhd": {
-                            "uri": "[concat('https://', variables('newStorageAccountMaster'), '.blob.core.windows.net/vhd/', variables('openshiftMasterHostname'), '.vhd')]"
+                            
+                            "uri": "[concat(concat(reference(resourceId(resourceGroup().name, 'Microsoft.Storage/storageAccounts', variables('newStorageAccountMaster')), '2015-06-15').primaryEndpoints['blob'], 'vhds/'), variables('openshiftMasterHostname'), variables('uniqueString'),'.vhd')]"
                         },
                         "caching": "ReadWrite",
                         "createOption": "FromImage"
@@ -1004,7 +1008,8 @@
                     "osDisk": {
                         "name": "[concat(variables('openshiftInfraHostname'), 'osdisk')]",
                         "vhd": {
-                            "uri": "[concat('https://', variables('newStorageAccountMaster'), '.blob.core.windows.net/vhd/', variables('openshiftInfraHostname'), '.vhd')]"
+                          
+                            "uri": "[concat(concat(reference(resourceId(resourceGroup().name, 'Microsoft.Storage/storageAccounts', variables('newStorageAccountMaster')), '2015-06-15').primaryEndpoints['blob'], 'vhds/'), variables('openshiftInfraHostname'), variables('uniqueString'),'.vhd')]"
                         },
                         "caching": "ReadWrite",
                         "createOption": "FromImage"
@@ -1073,7 +1078,8 @@
                     "osDisk": {
                         "name": "[concat(variables('openshiftNodeHostname'), copyIndex(), 'osdisk')]",
                         "vhd": {
-                            "uri": "[concat('https://', variables('newStorageAccountNode'), '.blob.core.windows.net/vhd/', variables('openshiftNodeHostname'), copyIndex(), '.vhd')]"
+                           
+                            "uri": "[concat(concat(reference(resourceId(resourceGroup().name, 'Microsoft.Storage/storageAccounts', variables('newStorageAccountMaster')), '2015-06-15').primaryEndpoints['blob'], 'vhds/'), variables('openshiftNodeHostname'), variables('uniqueString'),copyIndex(),'.vhd')]"
                         },
                         "caching": "ReadWrite",
                         "createOption": "FromImage"

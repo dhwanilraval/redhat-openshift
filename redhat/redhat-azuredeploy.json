@@ -201,7 +201,7 @@
         },
         "cloudAccessUsername": {
             "type": "string",
-            "defaultValue": "pradeep-sysgain",
+           
             "minLength": 1,
             "metadata": {
                 "description": "Cloud Access Username"
@@ -209,7 +209,7 @@
         },
         "cloudAccessPassword": {
             "type": "securestring",
-            "defaultValue": "S3aHawks#",
+           
             "minLength": 1,
             "metadata": {
                 "description": "Cloud Access password"
@@ -217,7 +217,7 @@
         },
         "cloudAccessPoolId": {
             "type": "string",
-            "defaultValue": "8a85f98151bb49d20151ca249d483d93",
+            
             "minLength": 1,
             "metadata": {
                 "description": "Pool ID with RHEL and OpenShift entitlements"
@@ -1101,7 +1101,7 @@
         },
         {
             "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(variables('openshiftMasterHostname'), '/masterPrep')]",
+            "name": "[concat(variables('openshiftMasterHostname'), '/deployOpenShift')]",
             "location": "[variables('location')]",
             "apiVersion": "[variables('apiVersionCompute')]",
             "tags": {
@@ -1111,9 +1111,9 @@
                 "[concat('Microsoft.Compute/virtualMachines/', variables('openshiftMasterHostname'))]"
             ],
             "properties": {
-                "publisher": "Microsoft.OSTCExtensions",
-                "type": "customScriptForLinux",
-                "typeHandlerVersion": "1.5",
+                "publisher": "Microsoft.Azure.Extensions",
+                "type": "CustomScript",
+                "typeHandlerVersion": "2.0",
                 "autoUpgradeMinorVersion": true,
                 "settings": {
                     "fileUris": [

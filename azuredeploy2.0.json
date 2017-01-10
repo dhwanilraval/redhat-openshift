@@ -125,22 +125,7 @@
                 "description": "OpenShift cluster prefix.  Used to generate master, infra and node hostnames.  Maximum of 5 characters."
             }
         },
-        "openshiftMasterPublicIpDnsLabel": {
-            "type": "string",
-            "defaultValue": "opmadns",
-            "minLength": 1,
-            "metadata": {
-                "description": "OpenShift Master VM public IP DNS name. Must be lowercase. It should match with the following regular expression: ^[a-z][a-z0-9-]{1,61}[a-z0-9]$ or it will raise an error."
-            }
-        },
-        "nodeLbPublicIpDnsLabel": {
-            "type": "string",
-            "minLength": 1,
-            "defaultValue": "opnodns",
-            "metadata": {
-                "description": "OpenShift Nodes Load Balancer public IP DNS name. Must be lowercase. It should match with the following regular expression: ^[a-z][a-z0-9-]{1,61}[a-z0-9]$ or it will raise an error."
-            }
-        },
+        
         "nodeInstanceCount": {
             "type": "int",
             "defaultValue": 1,
@@ -314,11 +299,12 @@
         }
     },
     "variables": {
-
-       
-        "uniqueString": "[substring(uniqueString(resourceGroup().id) ,0 ,7)]",
-        "openshiftMasterPublicIpDnsPrefix":"[concat(parameters('openshiftMasterPublicIpDnsLabel'),uniqueString(resourceGroup().id))]",
-        "nodeLbPublicIpDnsPrefix":"[concat(parameters('nodeLbPublicIpDnsLabel'),uniqueString(resourceGroup().id))]",
+        "uniqueString": "[substring(uniqueString(resourceGroup().id) ,0 ,6)]",
+        "openshiftMasterPublicIpDnsLabel":"[concat('opmadns',variables('uniqueString'))]",
+        "nodeLbPublicIpDnsLabel": "[concat('opnodns',variables('uniqueString'))]",
+        
+        "openshiftMasterPublicIpDnsPrefix":"[concat(variables('openshiftMasterPublicIpDnsLabel'),uniqueString(resourceGroup().id))]",
+        "nodeLbPublicIpDnsPrefix":"[concat(variables('nodeLbPublicIpDnsLabel'),uniqueString(resourceGroup().id))]",
         "location": "[resourceGroup().location]",
         "sqlserverName": "[concat('sqlserver',uniqueString(resourceGroup().id))]",
         "sqldatabasesName": "[concat('sqldb',uniqueString(resourceGroup().id))]",
@@ -344,7 +330,7 @@
         "masterSubnetName": "mastersubnet",
         "nodeSubnetName": "[concat(variables('openshiftNodeHostname'), 'subnet')]",
         "nodeLoadBalancerName": "[concat(variables('openshiftNodeHostname'), 'lb')]",
-        "nodePublicIpAddressId": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('nodeLbPublicIpDnsLabel'))]",
+        "nodePublicIpAddressId": "[resourceId('Microsoft.Network/publicIPAddresses', variables('nodeLbPublicIpDnsLabel'))]",
         "nodeLbId": "[resourceId('Microsoft.Network/loadBalancers', variables('nodeLoadBalancerName'))]",
         "lbFrontEndConfigId": "[concat(variables('nodeLbId'), '/frontendIPConfigurations/loadBalancerFrontEnd')]",
         "lbBackendPoolId": "[concat(variables('nodeLbId'),'/backendAddressPools/loadBalancerBackend')]",
@@ -684,7 +670,7 @@
         },
         {
             "type": "Microsoft.Network/publicIPAddresses",
-            "name": "[parameters('nodeLbPublicIpDnsLabel')]",
+            "name": "[variables('nodeLbPublicIpDnsLabel')]",
             "location": "[variables('location')]",
             "apiVersion": "[variables('apiVersionNetwork')]",
             "tags": {
@@ -699,7 +685,7 @@
         },
         {
             "type": "Microsoft.Network/publicIPAddresses",
-            "name": "[parameters('openshiftMasterPublicIpDnsLabel')]",
+            "name": "[variables('openshiftMasterPublicIpDnsLabel')]",
             "location": "[variables('location')]",
             "apiVersion": "[variables('apiVersionNetwork')]",
             "tags": {
@@ -735,7 +721,7 @@
                 "displayName": "OpenShiftNodeLB"
             },
             "dependsOn": [
-                "[concat('Microsoft.Network/publicIPAddresses/', parameters('nodeLbPublicIpDnsLabel'))]"
+                "[concat('Microsoft.Network/publicIPAddresses/', variables('nodeLbPublicIpDnsLabel'))]"
             ],
             "properties": {
                 "frontendIPConfigurations": [
@@ -821,7 +807,7 @@
             },
             "dependsOn": [
                 "[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]",
-                "[concat('Microsoft.Network/publicIPAddresses/', parameters('openshiftMasterPublicIpDnsLabel'))]"
+                "[concat('Microsoft.Network/publicIPAddresses/', variables('openshiftMasterPublicIpDnsLabel'))]"
             ],
             "properties": {
                 "ipConfigurations": [
@@ -830,7 +816,7 @@
                         "properties": {
                             "privateIPAllocationMethod": "Dynamic",
                             "publicIPAddress": {
-                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('openshiftMasterPublicIpDnsLabel'))]"
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('openshiftMasterPublicIpDnsLabel'))]"
                             },
                             "subnet": {
                                 "id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'), '/subnets/', variables('masterSubnetName'))]"
@@ -1210,10 +1196,10 @@
                         "value": "[variables('openshiftMasterHostname')]"
                     },
                     "openshiftMasterPublicIpFqdn": {
-                        "value": "[reference(parameters('openshiftMasterPublicIpDnsLabel')).dnsSettings.fqdn]"
+                        "value": "[reference(variables('openshiftMasterPublicIpDnsLabel')).dnsSettings.fqdn]"
                     },
                     "openshiftMasterPublicIpAddress": {
-                        "value": "[reference(parameters('openshiftMasterPublicIpDnsLabel')).ipAddress]"
+                        "value": "[reference(variables('openshiftMasterPublicIpDnsLabel')).ipAddress]"
                     },
                     "openshiftInfraHostname": {
                         "value": "[variables('openshiftInfraHostname')]"
@@ -1231,7 +1217,7 @@
                         "value": "[parameters('openshiftPassword')]"
                     },
                     "xipioDomain": {
-                        "value": "[concat(reference(parameters('nodeLbPublicIpDnsLabel')).ipAddress, '.xip.io')]"
+                        "value": "[concat(reference(variables('nodeLbPublicIpDnsLabel')).ipAddress, '.xip.io')]"
                     },
                     "customDomain": {
                         "value": "[parameters('defaultSubDomain')]"
@@ -1254,15 +1240,15 @@
     "outputs": {
         "openshiftConsoleUrl": {
             "type": "string",
-            "value": "[concat('https://', reference(parameters('openshiftMasterPublicIpDnsLabel')).dnsSettings.fqdn, ':8443/console')]"
+            "value": "[concat('https://', reference(variables('openshiftMasterPublicIpDnsLabel')).dnsSettings.fqdn, ':8443/console')]"
         },
         "openshiftMasterSsh": {
             "type": "string",
-            "value": "[concat('ssh ', parameters('adminUsername'), '@', reference(parameters('openshiftMasterPublicIpDnsLabel')).dnsSettings.fqdn)]"
+            "value": "[concat('ssh ', parameters('adminUsername'), '@', reference(variables('openshiftMasterPublicIpDnsLabel')).dnsSettings.fqdn)]"
         },
         "openshiftNodeLoadBalancerFQDN": {
             "type": "string",
-            "value": "[reference(parameters('nodeLbPublicIpDnsLabel')).dnsSettings.fqdn]"
+            "value": "[reference(variables('nodeLbPublicIpDnsLabel')).dnsSettings.fqdn]"
         }
     }
 }

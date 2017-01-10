@@ -325,7 +325,7 @@
         "firewallRulesName": "AllowIPs",
         "startIpAddress": "0.0.0.0",
         "endIpAddress": "0.0.0.0",
-        "_artifactsLocation": "https://raw.githubusercontent.com/sysgain/redhat-openshift/redhat-openshift-sqldb/redhat",
+        "_artifactsLocation": "https://raw.githubusercontent.com/sysgain/redhat-openshift/redhat-openshift-sqldb",
         "azuresqldbTemplateUrl": "[concat(variables('_artifactsLocation'), '/nested/azure-sqldb.json')]",
         "apiVersionCompute": "2015-06-15",
         "apiVersionNetwork": "2015-06-15",
@@ -366,11 +366,11 @@
         },
         "imageReference": "[variables('osType')]",
         "sshKeyPath": "[concat('/home/', parameters('adminUsername'), '/.ssh/authorized_keys')]",
-        "nodePrepScriptUrl": "[concat(variables('_artifactsLocation'), 'scripts/nodePrep.sh')]",
-        "masterPrepScriptUrl": "[concat(variables('_artifactsLocation'), 'scripts/masterPrep.sh')]",
+        "nodePrepScriptUrl": "[concat(variables('_artifactsLocation'), '/scripts/nodePrep.sh')]",
+        "masterPrepScriptUrl": "[concat(variables('_artifactsLocation'), '/scripts/masterPrep.sh')]",
         "nodePrepScriptFileName": "nodePrep.sh",
         "masterPrepScriptFileName": "masterPrep.sh",
-        "openshiftDeploymentTemplateUrl": "[concat(variables('_artifactsLocation'), 'nested/openshiftdeploy.json')]",
+        "openshiftDeploymentTemplateUrl": "[concat(variables('_artifactsLocation'), '/nested/openshiftdeploy.json')]",
         "vmSizesMap": {
             "Standard_A4": {
                 "storageAccountType": "Standard_LRS"

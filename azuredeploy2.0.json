@@ -125,7 +125,6 @@
                 "description": "OpenShift cluster prefix.  Used to generate master, infra and node hostnames.  Maximum of 5 characters."
             }
         },
-        
         "nodeInstanceCount": {
             "type": "int",
             "defaultValue": 1,
@@ -186,7 +185,6 @@
         },
         "cloudAccessUsername": {
             "type": "string",
-           
             "minLength": 1,
             "metadata": {
                 "description": "Cloud Access Username"
@@ -194,7 +192,6 @@
         },
         "cloudAccessPassword": {
             "type": "securestring",
-           
             "minLength": 1,
             "metadata": {
                 "description": "Cloud Access password"
@@ -202,7 +199,6 @@
         },
         "cloudAccessPoolId": {
             "type": "string",
-            
             "minLength": 1,
             "metadata": {
                 "description": "Pool ID with RHEL and OpenShift entitlements"
@@ -210,7 +206,6 @@
         },
         "sshPublicKey": {
             "type": "securestring",
-            "defaultValue": "ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEAgcSbr9gOrwdhhS2v6HTITIgADw5Gs/IQ196B/sHNsU/eXv5BtgycRzKi042E/0tOfJXsmd9OjSjx6UQ0ijPOGjLGeXjIHWUp5yquI1WhcnZC0QEkGOl7N7xrFTLGLzJSQmhHPqiZ81xhhHQ454AnpSOJjjGGk/EjewiPMwvqu++Gc5fQ+Drtg7oKtD78uF0Uh5ivRUftLfPESFaFD4MptPVobWRFgZqHCPXKySYGDSDrQWfgRRfiCuTgXjsNdEUt89cf517XzEgK8WIlEvY19kMaP0Tq5QOoGlidqJ2lfsoKmGTh9P9jM0k67Viv9TXydoIWPHm3xMTejxORu6Qr3Q== rsa-key-20161107",
             "metadata": {
                 "description": "SSH public key on all VMs"
             }
@@ -300,11 +295,10 @@
     },
     "variables": {
         "uniqueString": "[substring(uniqueString(resourceGroup().id) ,0 ,6)]",
-        "openshiftMasterPublicIpDnsLabel":"[concat('opmadns',variables('uniqueString'))]",
+        "openshiftMasterPublicIpDnsLabel": "[concat('opmadns',variables('uniqueString'))]",
         "nodeLbPublicIpDnsLabel": "[concat('opnodns',variables('uniqueString'))]",
-        
-        "openshiftMasterPublicIpDnsPrefix":"[concat(variables('openshiftMasterPublicIpDnsLabel'),uniqueString(resourceGroup().id))]",
-        "nodeLbPublicIpDnsPrefix":"[concat(variables('nodeLbPublicIpDnsLabel'),uniqueString(resourceGroup().id))]",
+        "openshiftMasterPublicIpDnsPrefix": "[concat(variables('openshiftMasterPublicIpDnsLabel'),uniqueString(resourceGroup().id))]",
+        "nodeLbPublicIpDnsPrefix": "[concat(variables('nodeLbPublicIpDnsLabel'),uniqueString(resourceGroup().id))]",
         "location": "[resourceGroup().location]",
         "sqlserverName": "[concat('sqlserver',uniqueString(resourceGroup().id))]",
         "sqldatabasesName": "[concat('sqldb',uniqueString(resourceGroup().id))]",
@@ -357,7 +351,6 @@
         },
         "imageReference": "[variables('osType')]",
         "sshKeyPath": "[concat('/home/', parameters('adminUsername'), '/.ssh/authorized_keys')]",
-        
         "vmSizesMap": {
             "Standard_A4": {
                 "storageAccountType": "Standard_LRS"
@@ -929,7 +922,6 @@
                     "osDisk": {
                         "name": "[concat(variables('openshiftMasterHostname'), 'osdisk')]",
                         "vhd": {
-                            
                             "uri": "[concat(concat(reference(resourceId(resourceGroup().name, 'Microsoft.Storage/storageAccounts', variables('newStorageAccountMaster')), '2015-06-15').primaryEndpoints['blob'], 'vhds/'), variables('openshiftMasterHostname'), variables('uniqueString'),'.vhd')]"
                         },
                         "caching": "ReadWrite",
@@ -995,7 +987,6 @@
                     "osDisk": {
                         "name": "[concat(variables('openshiftInfraHostname'), 'osdisk')]",
                         "vhd": {
-                          
                             "uri": "[concat(concat(reference(resourceId(resourceGroup().name, 'Microsoft.Storage/storageAccounts', variables('newStorageAccountMaster')), '2015-06-15').primaryEndpoints['blob'], 'vhds/'), variables('openshiftInfraHostname'), variables('uniqueString'),'.vhd')]"
                         },
                         "caching": "ReadWrite",
@@ -1065,7 +1056,6 @@
                     "osDisk": {
                         "name": "[concat(variables('openshiftNodeHostname'), copyIndex(), 'osdisk')]",
                         "vhd": {
-                           
                             "uri": "[concat(concat(reference(resourceId(resourceGroup().name, 'Microsoft.Storage/storageAccounts', variables('newStorageAccountMaster')), '2015-06-15').primaryEndpoints['blob'], 'vhds/'), variables('openshiftNodeHostname'), variables('uniqueString'),copyIndex(),'.vhd')]"
                         },
                         "caching": "ReadWrite",

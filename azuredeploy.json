@@ -8,7 +8,7 @@
                 "description": "Base URL for Template FIles",
                 "artifactsBaseUrl": ""
             },
-            "defaultValue": "https://raw.githubusercontent.com/haroldwongms/oselab/master/"
+            "defaultValue": "https://raw.githubusercontent.com/sysgain/redhat-openshift/openshift-v3.5-td"
         },
         "masterVmSize": {
             "type": "string",
@@ -239,11 +239,11 @@
         },
         "imageReference": "[variables('osType')]",
         "sshKeyPath": "[concat('/home/', parameters('adminUsername'), '/.ssh/authorized_keys')]",
-        "nodePrepScriptUrl": "[concat(parameters('_artifactsLocation'), 'nodePrep.sh')]",
-        "masterPrepScriptUrl": "[concat(parameters('_artifactsLocation'), 'masterPrep.sh')]",
+        "nodePrepScriptUrl": "[concat(parameters('_artifactsLocation'), '/scripts/nodePrep.sh')]",
+        "masterPrepScriptUrl": "[concat(parameters('_artifactsLocation'), '/scripts/masterPrep.sh')]",
         "nodePrepScriptFileName": "nodePrep.sh",
         "masterPrepScriptFileName": "masterPrep.sh",
-        "openshiftDeploymentTemplateUrl": "[concat(parameters('_artifactsLocation'), 'openshiftdeploy.json')]",
+        "openshiftDeploymentTemplateUrl": "[concat(parameters('_artifactsLocation'), '/nested/openshiftdeploy.json')]",
         "vmSizesMap": {
             "Standard_A4": {
                 "storageAccountType": "Standard_LRS"
@@ -958,7 +958,7 @@
                     },
                     "sshPrivateKey": {
                         "reference": {
-                            "keyvault": {
+                            "keyVault": {
                                 "id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
                             },
                             "secretName": "[parameters('keyVaultSecret')]"

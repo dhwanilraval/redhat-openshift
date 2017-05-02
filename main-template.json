@@ -191,7 +191,7 @@
     },
     "variables": {
         "location": "[resourceGroup().location]",
-        "_artifactsLocation": "https://aztdrepo.blob.core.windows.net/redhatopenshift",
+        "_artifactsLocation": "https://raw.githubusercontent.com/sysgain/redhat-openshift/redhat-openshift-td",
         "apiVersionCompute": "2015-06-15",
         "apiVersionNetwork": "2016-03-30",
         "apiVersionStorage": "2015-06-15",

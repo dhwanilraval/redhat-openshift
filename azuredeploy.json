@@ -125,6 +125,7 @@
             }
         },
         "openshiftClusterPrefix": {
+            "defaultValue": "opnsh",
             "type": "string",
             "minLength": 1,
             "maxLength": 20,
@@ -135,6 +136,7 @@
         "adminUsername": {
             "type": "string",
             "minLength": 1,
+            "defaultValue": "testuser",
             "metadata": {
                 "description": "Administrator username on all VMs and first OpenShift Username"
             }
@@ -162,12 +164,14 @@
         },
         "sshPublicKey": {
             "type": "securestring",
+            "defaultValue": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC8T46pA0uM64Yeis6DO9Q01g8lfvHMe4I4kpRW9u4QYiDL6jctLw6+Y1VHtROIYvuN4AHqBR7hQgAX3256Cu90EhmygWZglsVcKUBhir25NRuRM4qBcA+k1oBJt0EOKXZRDw6Efb/wLEcDtP2jnx7dOb9C7NewNNPCAEIOIvwfLechHAC7VcTe6cvqQ37r8TJpMz7WHZYhS4eyCajZt3KLbi+XciEWbucXISLPL4h+9RpVAkybmCkIfB08lX/wQ+d2O7Q0hOOLB6gU/49w/fkBmEjz13pRQcB5gV9ULbHIkP6Wn3mXYXGZm6rwzDHSC1BcxZy1erKqekhHtTMqZ6DZ imported-openssh-key",
             "metadata": {
                 "description": "SSH public key on all VMs"
             }
         },
         "keyVaultResourceGroup": {
             "type": "string",
+            "defaultValue": "bbtestos6",
             "minLength": 1,
             "metadata": {
                 "description": "Resource Group that contains the Key Vault"
@@ -175,6 +179,7 @@
         },
         "keyVaultName": {
             "type": "string",
+            "defaultValue": "bbopenshiftkeyvault6",
             "minLength": 1,
             "metadata": {
                 "description": "Name of the Key Vault"
@@ -183,6 +188,7 @@
         "keyVaultSecret": {
             "type": "securestring",
             "minLength": 1,
+            "defaultValue": "privatekey6",
             "metadata": {
                 "description": "Key Vault Secret Name that contains the Private Key"
             }
@@ -231,7 +237,7 @@
         },
         "sshPrivateKey": {
             "reference": {
-                "keyvault": {
+                "keyVault": {
                     "id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
                 },
                 "secretName": "[parameters('keyVaultSecret')]"
